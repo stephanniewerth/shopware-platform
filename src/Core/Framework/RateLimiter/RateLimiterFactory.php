@@ -18,6 +18,8 @@ class RateLimiterFactory
 
     private ?LockFactory $lockFactory;
 
+    private bool $enabled;
+
     /**
      * @internal
      */
@@ -26,11 +28,12 @@ class RateLimiterFactory
         $this->config = $config;
         $this->storage = $storage;
         $this->lockFactory = $lockFactory;
+        $this->enabled = $config['enabled'] ?: false;
     }
 
     public function create(?string $key = null): LimiterInterface
     {
-        if ($this->config['enabled'] === false) {
+        if ($this->enabled === false) {
             return new NoLimiter();
         }
 
